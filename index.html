@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Surprise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .love-popup.active, .sister-popup.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sister-content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            transform: scale(0.8);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .sister-popup.active .sister-content {
+            transform: scale(1);
+        }
+
+        @keyframes shake-side {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px) rotate(-1deg); }
+            75% { transform: translateX(10px) rotate(1deg); }
+        }
+
+        .shake-element {
+            animation: shake-side 0.4s ease-in-out infinite;
+        }
+
+        .emoji-spin {
+            display: inline-block;
+            animation: rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.15); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.15); }
+            70% { transform: scale(1); }
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-20vh) scale(1.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .love-popup {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 77, 109, 0.2);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .love-popup.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .love-content {
+            font-family: 'Dancing Script', cursive;
+            color: white;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .heart-main {
+            font-size: 120px;
+            color: #ff4d6d;
+            animation: heartbeat 1.5s infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 77, 109, 0.5));
+        }
+
+        .heart-particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 50;
+            animation: float-up 4s linear forwards;
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, #ff4d6d 0%, #c9184a 100%);
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(255, 77, 109, 0.4);
+        }
+
+        .btn-premium:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="heart-container" class="fixed inset-0 pointer-events-none"></div>
+
+    <div class="relative z-10 w-full max-w-md px-6">
+        <div id="main-card" class="glass-card p-10 text-center">
+            <div id="input-section">
+                <div class="mb-6 inline-block p-4 bg-pink-50 rounded-full">
+                    <svg class="w-12 h-12 text-pink-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Hello Beautiful!</h1>
+                <p class="text-gray-500 mb-8">Type your name to reveal the surprise</p>
+                
+                <div class="space-y-5">
+                    <input 
+                        type="text" 
+                        id="nameInput" 
+                        placeholder="Enter your name..." 
+                        class="w-full px-6 py-4 bg-white/60 border-2 border-pink-100 rounded-2xl focus:outline-none focus:border-pink-400 focus:ring-4 focus:ring-pink-100 transition-all text-lg text-center"
+                        onkeypress="if(event.key === 'Enter') handleCheck()"
+                    >
+                    
+                    <button 
+                        onclick="handleCheck()"
+                        class="btn-premium w-full text-white font-bold py-4 rounded-2xl text-lg"
+                    >
+                        Reveal Love ❤️
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOVE POPUP -->
+    <div id="loveOverlay" class="love-popup">
+        <div class="text-center love-content px-4">
+            <div class="heart-main mb-4">❤️</div>
+            <h2 class="text-6xl md:text-8xl font-bold mb-4">I LOVE YOU</h2>
+            <p class="text-2xl md:text-3xl opacity-90 mb-8">Forever & Always</p>
+            
+            <button 
+                onclick="closeOverlay()"
+                class="bg-white/20 hover:bg-white/30 backdrop-blur-md text-white border border-white/50 px-8 py-3 rounded-full text-lg transition-all"
+            >
+                Close with Love
+            </button>
+        </div>
+    </div>
+
+    <!-- SISTER POPUP (NEW ANIMATED ERROR) -->
+    <div id="sisterOverlay" class="love-popup" style="background: rgba(0, 0, 0, 0.4);">
+        <div class="sister-content text-center max-w-xs w-full mx-4">
+            <div class="text-6xl mb-4 shake-element">🤨</div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Wait a minute...</h2>
+            <p class="text-xl text-gray-600 mb-6">Who are you, <span class="text-pink-600 font-bold">sister?</span></p>
+            <button 
+                onclick="closeSister()"
+                class="w-full bg-gray-800 text-white py-3 rounded-xl font-bold hover:bg-gray-700 transition-colors"
+            >
+                Try Again 🔄
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const heartContainer = document.getElementById('heart-container');
+        const nameInput = document.getElementById('nameInput');
+        const loveOverlay = document.getElementById('loveOverlay');
+        const sisterOverlay = document.getElementById('sisterOverlay');
+        let stormInterval;
+
+        function handleCheck() {
+            const name = nameInput.value.trim().toLowerCase();
+            
+            if (!name) return;
+
+            // Check if 'tanha' exists anywhere in the input string
+            if (name.includes('tanha')) {
+                triggerLove();
+            } else {
+                triggerSister();
+            }
+        }
+
+        function triggerSister() {
+            sisterOverlay.classList.add('active');
+            // Add a small shake to the background card too
+            document.getElementById('main-card').style.animation = 'shake-side 0.4s ease-in-out';
+            setTimeout(() => {
+                document.getElementById('main-card').style.animation = '';
+            }, 400);
+        }
+
+        function closeSister() {
+            sisterOverlay.classList.remove('active');
+            nameInput.value = '';
+            nameInput.focus();
+        }
+
+        function triggerLove() {
+            loveOverlay.classList.add('active');
+            
+            // Initial Explosion
+            for(let i=0; i<30; i++) {
+                setTimeout(() => createHeart(true), i * 50);
+            }
+
+            // Continuous Storm
+            stormInterval = setInterval(() => createHeart(), 100);
+        }
+
+        function closeOverlay() {
+            loveOverlay.classList.remove('active');
+            clearInterval(stormInterval);
+            nameInput.value = '';
+        }
+
+        // Ambient hearts in background
+        setInterval(() => {
+            if (!loveOverlay.classList.contains('active')) {
+                createHeart();
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
